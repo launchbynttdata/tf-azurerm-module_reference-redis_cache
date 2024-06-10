@@ -96,7 +96,7 @@ module "vnet_link" {
 module "additional_vnet_links" {
   source = "git::https://github.com/launchbynttdata/tf-azurerm-module_primitive-private_dns_vnet_link.git?ref=1.0.0"
 
-  for_each = var.additional_vnet_links
+  for_each = var.public_network_access_enabled ? {} : var.additional_vnet_links
 
   link_name             = each.key
   resource_group_name   = var.resource_group_name != null ? var.resource_group_name : module.resource_group[0].name
