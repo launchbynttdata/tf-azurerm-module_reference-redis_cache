@@ -248,7 +248,7 @@ variable "zones" {
 variable "private_dns_zone_suffix" {
   description = <<EOT
     The DNS Zone suffix for Azure Redis cache. Default is `privatelink.redis.cache.windows.net` for Public Cloud
-    For US gov cloud it should be `redis.cache.usgovcloudapi.net`
+    For US gov cloud it should be `privatelink.redis.cache.usgovcloudapi.net`
   EOT
   type        = string
   default     = "privatelink.redis.cache.windows.net"
