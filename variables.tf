@@ -111,6 +111,12 @@ variable "resource_group_name" {
   default     = null
 }
 
+variable "use_azure_region_abbr" {
+  description = "Whether to use the Azure region abbreviation in the resource name. e.g. eastus -> eus"
+  type        = bool
+  default     = true
+}
+
 variable "location" {
   description = "target resource group resource mask"
   type        = string
