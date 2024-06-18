@@ -111,7 +111,7 @@ module "additional_vnet_links" {
 }
 
 module "private_endpoint" {
-  source = "git::https://github.com/launchbynttdata/tf-azurerm-module_primitive-private_endpoint.git?ref=1.0.0"
+  source = "git::https://github.com/launchbynttdata/tf-azurerm-module_primitive-private_endpoint.git?ref=feature/output-network-interfaces"
 
   count = var.public_network_access_enabled ? 0 : 1
 
@@ -129,4 +129,27 @@ module "private_endpoint" {
   tags = merge(var.tags, { resource_name = module.resource_names["private_endpoint"].standard })
 
   depends_on = [module.resource_group, module.redis_cache, module.private_dns_zone]
+}
+
+module "network_security_group" {
+  source = "git::https://github.com/launchbynttdata/tf-azurerm-module_primitive-network_security_group.git?ref=1.0.0"
+
+  count = local.create_network_security_group != true ? 0 : 1
+
+  name                = module.resource_names["network_security_group"].standard
+  resource_group_name = var.resource_group_name != null ? var.resource_group_name : module.resource_group[0].name
+  location            = var.location
+
+  security_rules = var.network_security_rules
+
+  tags = merge(var.tags, { resource_name = module.resource_names["network_security_group"].standard })
+}
+
+module "network_security_group_association" {
+  source = "git::https://github.com/launchbynttdata/tf-azurerm-module_primitive-network_interface_security_group_association.git?ref=1.0.0"
+
+  count = local.create_network_security_group != true ? 0 : 1
+
+  network_interface_id      = module.private_endpoint[0].network_interface_ids[0]
+  network_security_group_id = module.network_security_group[0].network_security_group_id
 }
