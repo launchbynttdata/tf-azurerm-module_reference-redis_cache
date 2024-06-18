@@ -36,6 +36,10 @@ variable "resource_names_map" {
       name       = "pesc"
       max_length = 80
     }
+    network_security_group = {
+      name       = "nsg"
+      max_length = 80
+    }
   }
 }
 
@@ -278,4 +282,27 @@ variable "private_endpoint_subnet_id" {
   EOF
   type        = string
   default     = null
+}
+
+variable "network_security_rules" {
+  type = list(object({
+    name                                       = string
+    protocol                                   = string
+    access                                     = string
+    priority                                   = number
+    direction                                  = string
+    description                                = optional(string)
+    source_port_range                          = optional(string)
+    source_port_ranges                         = optional(list(string))
+    destination_port_range                     = optional(string)
+    destination_port_ranges                    = optional(list(string))
+    source_address_prefix                      = optional(string)
+    source_address_prefixes                    = optional(list(string))
+    source_application_security_group_ids      = optional(list(string))
+    destination_address_prefix                 = optional(string)
+    destination_address_prefixes               = optional(list(string))
+    destination_application_security_group_ids = optional(list(string))
+  }))
+  description = "(Optional) A list of security rules associated with the private endpoint"
+  default     = []
 }

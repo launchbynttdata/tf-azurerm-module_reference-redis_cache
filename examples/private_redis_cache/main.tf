@@ -93,6 +93,7 @@ module "redis_cache" {
   additional_vnet_links   = var.additional_vnet_links
 
   private_endpoint_subnet_id = module.virtual_network.subnet_map["private-endpoint-subnet"].id
+  network_security_rules     = var.network_security_rules
 
   tags = var.tags
 
