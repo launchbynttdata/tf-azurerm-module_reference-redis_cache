@@ -16,9 +16,9 @@ No providers.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_network_resource_names"></a> [network\_resource\_names](#module\_network\_resource\_names) | git::https://github.com/launchbynttdata/tf-launch-module_library-resource_name.git | 1.0.1 |
-| <a name="module_network_resource_group"></a> [network\_resource\_group](#module\_network\_resource\_group) | git::https://github.com/launchbynttdata/tf-azurerm-module_primitive-resource_group.git | 1.1.0 |
-| <a name="module_virtual_network"></a> [virtual\_network](#module\_virtual\_network) | git::https://github.com/launchbynttdata/tf-azurerm-module_primitive-virtual_network.git | 3.0.0 |
+| <a name="module_network_resource_names"></a> [network\_resource\_names](#module\_network\_resource\_names) | terraform.registry.launch.nttdata.com/module_library/resource_name/launch | ~> 1.0 |
+| <a name="module_network_resource_group"></a> [network\_resource\_group](#module\_network\_resource\_group) | terraform.registry.launch.nttdata.com/module_primitive/resource_group/azurerm | ~> 1.1 |
+| <a name="module_virtual_network"></a> [virtual\_network](#module\_virtual\_network) | terraform.registry.launch.nttdata.com/module_primitive/virtual_network/azurerm | ~> 3.0 |
 | <a name="module_redis_cache"></a> [redis\_cache](#module\_redis\_cache) | ../../ | n/a |
 
 ## Resources
