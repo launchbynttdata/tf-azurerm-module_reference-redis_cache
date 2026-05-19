@@ -10,30 +10,41 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+output "resource_group_name" {
+  description = "The name of the resource group"
+  value       = var.resource_group_name != null ? var.resource_group_name : module.resource_group[0].name
+}
+
 output "redis_cache_id" {
-  value = module.redis_cache.redis_cache_id
+  description = "The ID of the Redis cache"
+  value       = module.redis_cache.redis_cache_id
 }
 
 output "redis_cache_hostname" {
-  value = module.redis_cache.redis_cache_hostname
+  description = "The hostname of the Redis cache"
+  value       = module.redis_cache.redis_cache_hostname
 }
 
 output "redis_cache_primary_access_key" {
-  value     = module.redis_cache.redis_cache_primary_access_key
-  sensitive = true
+  description = "The primary access key for the Redis cache"
+  value       = module.redis_cache.redis_cache_primary_access_key
+  sensitive   = true
 }
 
 output "redis_cache_secondary_access_key" {
-  value     = module.redis_cache.redis_cache_secondary_access_key
-  sensitive = true
+  description = "The secondary access key for the Redis cache"
+  value       = module.redis_cache.redis_cache_secondary_access_key
+  sensitive   = true
 }
 
 output "redis_cache_primary_connection_string" {
-  value     = module.redis_cache.redis_cache_primary_connection_string
-  sensitive = true
+  description = "The primary connection string for the Redis cache"
+  value       = module.redis_cache.redis_cache_primary_connection_string
+  sensitive   = true
 }
 
 output "redis_cache_secondary_connection_string" {
-  value     = module.redis_cache.redis_cache_secondary_connection_string
-  sensitive = true
+  description = "The secondary connection string for the Redis cache"
+  value       = module.redis_cache.redis_cache_secondary_connection_string
+  sensitive   = true
 }

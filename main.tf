@@ -12,7 +12,7 @@
 
 module "resource_names" {
   source  = "terraform.registry.launch.nttdata.com/module_library/resource_name/launch"
-  version = "~> 1.0"
+  version = "~> 2.0"
 
   for_each = var.resource_names_map
 
@@ -49,7 +49,6 @@ module "redis_cache" {
   capacity                      = var.capacity
   family                        = var.family
   sku_name                      = var.sku_name
-  enable_non_ssl_port           = var.enable_non_ssl_port
   identity_ids                  = var.identity_ids
   minimum_tls_version           = var.minimum_tls_version
   patch_schedule                = var.patch_schedule

@@ -149,12 +149,6 @@ variable "sku_name" {
   default     = "Basic"
 }
 
-variable "enable_non_ssl_port" {
-  description = "Enable the non-SSL port (6379)"
-  type        = bool
-  default     = false
-}
-
 variable "identity_ids" {
   description = <<EOT
     Specifies a list of user managed identity ids to be assigned.
@@ -191,7 +185,6 @@ variable "redis_configuration" {
     aof_backup_enabled                      = optional(bool)
     aof_storage_connection_string_0         = optional(string)
     aof_storage_connection_string_1         = optional(string)
-    enable_authentication                   = optional(bool)
     active_directory_authentication_enabled = optional(bool)
     maxmemory_reserved                      = optional(number)
     maxmemory_delta                         = optional(number)

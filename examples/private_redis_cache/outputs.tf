@@ -10,6 +10,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+output "resource_group_name" {
+  value = module.redis_cache.resource_group_name
+}
+
 output "redis_cache_id" {
   value = module.redis_cache.redis_cache_id
 }
