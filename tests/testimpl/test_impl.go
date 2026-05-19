@@ -64,14 +64,8 @@ func TestComposableCompleteReadOnly(t *testing.T, ctx types.TestContext) {
 		cache, err := redisClient.Get(context.TODO(), resourceGroupName, cacheName, nil)
 		require.NoError(t, err, "Get Redis cache should succeed")
 		assert.Equal(t, cacheName, *cache.Name)
-		assert.Equal(t, "6", *cache.Properties.RedisVersion)
-		assert.Equal(t, false, *cache.Properties.PublicNetworkAccess == armredis.PublicNetworkAccessEnabled)
-	})
-
-	t.Run("TestRedisCacheHostname", func(t *testing.T) {
-		redisClient := getAzureRedisClient(t, subscriptionID)
-		cache, err := redisClient.Get(context.TODO(), resourceGroupName, cacheName, nil)
-		require.NoError(t, err, "Get Redis cache should succeed")
+		assert.True(t, strings.HasPrefix(*cache.Properties.RedisVersion, "6"), "Redis version should be 6.x, got: %s", *cache.Properties.RedisVersion)
+		assert.Equal(t, armredis.PublicNetworkAccessDisabled, *cache.Properties.PublicNetworkAccess)
 		assert.Equal(t, redisCacheHostname, *cache.Properties.HostName)
 	})
 }
