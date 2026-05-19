@@ -3,6 +3,7 @@ package testimpl
 import (
 	"context"
 	"os"
+	"strings"
 	"testing"
 
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
@@ -44,7 +45,7 @@ func TestComposableCompleteReadOnly(t *testing.T, ctx types.TestContext) {
 		if part == "resourceGroups" && i+1 < len(parts) {
 			resourceGroupName = parts[i+1]
 		}
-		if part == "Redis" && i+1 < len(parts) {
+		if strings.EqualFold(part, "redis") && i+1 < len(parts) {
 			cacheName = parts[i+1]
 		}
 	}
