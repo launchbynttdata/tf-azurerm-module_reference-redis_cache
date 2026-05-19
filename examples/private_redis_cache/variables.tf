@@ -243,23 +243,3 @@ variable "zones" {
   type        = list(string)
   default     = null
 }
-
-// variables to configure private DNS zone
-
-variable "private_dns_zone_suffix" {
-  description = <<EOT
-    The DNS Zone suffix for Azure Redis cache. Default is `privatelink.redis.cache.windows.net` for Public Cloud
-    For US gov cloud it should be `privatelink.redis.cache.usgovcloudapi.net`
-  EOT
-  type        = string
-  default     = "privatelink.redis.cache.windows.net"
-}
-
-variable "additional_vnet_links" {
-  description = <<EOF
-    A map of names to VNET IDs to create links with the private redis cache DNS Zone
-    Applicable only when `public_network_access_enabled` is set to false
-  EOF
-  type        = map(string)
-  default     = {}
-}

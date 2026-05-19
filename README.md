@@ -124,9 +124,6 @@ No providers.
 | <a name="module_resource_names"></a> [resource\_names](#module\_resource\_names) | terraform.registry.launch.nttdata.com/module_library/resource_name/launch | ~> 2.0 |
 | <a name="module_resource_group"></a> [resource\_group](#module\_resource\_group) | terraform.registry.launch.nttdata.com/module_primitive/resource_group/azurerm | ~> 1.0 |
 | <a name="module_redis_cache"></a> [redis\_cache](#module\_redis\_cache) | terraform.registry.launch.nttdata.com/module_primitive/redis_cache/azurerm | ~> 1.0 |
-| <a name="module_private_dns_zone"></a> [private\_dns\_zone](#module\_private\_dns\_zone) | terraform.registry.launch.nttdata.com/module_primitive/private_dns_zone/azurerm | ~> 1.0 |
-| <a name="module_vnet_link"></a> [vnet\_link](#module\_vnet\_link) | terraform.registry.launch.nttdata.com/module_primitive/private_dns_vnet_link/azurerm | ~> 1.0 |
-| <a name="module_additional_vnet_links"></a> [additional\_vnet\_links](#module\_additional\_vnet\_links) | terraform.registry.launch.nttdata.com/module_primitive/private_dns_vnet_link/azurerm | ~> 1.0 |
 | <a name="module_private_endpoint"></a> [private\_endpoint](#module\_private\_endpoint) | terraform.registry.launch.nttdata.com/module_primitive/private_endpoint/azurerm | ~> 1.0 |
 
 ## Resources
@@ -162,9 +159,13 @@ No resources.
 | <a name="input_replicas_per_primary"></a> [replicas\_per\_primary](#input\_replicas\_per\_primary) | Number of replicas to create per primary | `number` | `null` | no |
 | <a name="input_shard_count"></a> [shard\_count](#input\_shard\_count) | The number of shards to create on the cluster | `number` | `null` | no |
 | <a name="input_zones"></a> [zones](#input\_zones) | List of availability zones where the Redis cache should be located | `list(string)` | `null` | no |
-| <a name="input_private_dns_zone_suffix"></a> [private\_dns\_zone\_suffix](#input\_private\_dns\_zone\_suffix) | The DNS Zone suffix for Azure Redis cache. Default is `privatelink.redis.cache.windows.net` for Public Cloud<br/>    For US gov cloud it should be `privatelink.redis.cache.usgovcloudapi.net` | `string` | `"privatelink.redis.cache.windows.net"` | no |
-| <a name="input_additional_vnet_links"></a> [additional\_vnet\_links](#input\_additional\_vnet\_links) | A map of names to VNET IDs to create links with the private redis cache DNS Zone<br/>    Applicable only when `public_network_access_enabled` is set to false | `map(string)` | `{}` | no |
-| <a name="input_private_endpoint_subnet_id"></a> [private\_endpoint\_subnet\_id](#input\_private\_endpoint\_subnet\_id) | ID of the subnet where the private endpoint should be deployed<br/>    Required when `public_network_access_enabled` is set to false | `string` | `null` | no |
+| <a name="input_create_private_endpoint"></a> [create\_private\_endpoint](#input\_create\_private\_endpoint) | Whether or not to create a Private Endpoint for the Redis Cache | `bool` | `false` | no |
+| <a name="input_private_endpoint_subnet_id"></a> [private\_endpoint\_subnet\_id](#input\_private\_endpoint\_subnet\_id) | The ID of the subnet to which the Redis Cache private endpoint is connected | `string` | `null` | no |
+| <a name="input_private_endpoint_dns_zone_ids"></a> [private\_endpoint\_dns\_zone\_ids](#input\_private\_endpoint\_dns\_zone\_ids) | A list of Private DNS Zone IDs to link with the Private Endpoint. | `list(string)` | `[]` | no |
+| <a name="input_private_endpoint_dns_zone_group_name"></a> [private\_endpoint\_dns\_zone\_group\_name](#input\_private\_endpoint\_dns\_zone\_group\_name) | Specifies the Name of the Private DNS Zone Group. | `string` | `"redisCache"` | no |
+| <a name="input_private_endpoint_is_manual_connection"></a> [private\_endpoint\_is\_manual\_connection](#input\_private\_endpoint\_is\_manual\_connection) | Does the Private Endpoint require Manual Approval from the remote resource owner? Changing this forces a new resource<br/>    to be created. | `bool` | `false` | no |
+| <a name="input_private_endpoint_subresource_names"></a> [private\_endpoint\_subresource\_names](#input\_private\_endpoint\_subresource\_names) | A list of subresource names which the Private Endpoint is able to connect to. subresource\_names corresponds to group\_id.<br/>    Possible values are detailed in the product documentation in the Subresources column.<br/>    https://docs.microsoft.com/azure/private-link/private-endpoint-overview#private-link-resource | `list(string)` | <pre>[<br/>  "redisCache"<br/>]</pre> | no |
+| <a name="input_private_endpoint_request_message"></a> [private\_endpoint\_request\_message](#input\_private\_endpoint\_request\_message) | A message passed to the owner of the remote resource when the private endpoint attempts to establish the connection<br/>    to the remote resource. The request message can be a maximum of 140 characters in length.<br/>    Only valid if `is_manual_connection=true` | `string` | `""` | no |
 
 ## Outputs
 
