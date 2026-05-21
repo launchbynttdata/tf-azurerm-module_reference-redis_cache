@@ -12,7 +12,7 @@
 
 module "resource_names" {
   source  = "terraform.registry.launch.nttdata.com/module_library/resource_name/launch"
-  version = "~> 1.0"
+  version = "~> 2.0"
 
   for_each = var.resource_names_map
 
@@ -49,7 +49,6 @@ module "redis_cache" {
   capacity                      = var.capacity
   family                        = var.family
   sku_name                      = var.sku_name
-  enable_non_ssl_port           = var.enable_non_ssl_port
   identity_ids                  = var.identity_ids
   minimum_tls_version           = var.minimum_tls_version
   patch_schedule                = var.patch_schedule
@@ -68,72 +67,25 @@ module "redis_cache" {
   depends_on = [module.resource_group]
 }
 
-module "private_dns_zone" {
-  source  = "terraform.registry.launch.nttdata.com/module_primitive/private_dns_zone/azurerm"
-  version = "~> 1.0"
-
-  count = var.public_network_access_enabled ? 0 : 1
-
-  zone_name           = var.private_dns_zone_suffix
-  resource_group_name = var.resource_group_name != null ? var.resource_group_name : module.resource_group[0].name
-
-  tags = var.tags
-
-  depends_on = [module.resource_group]
-}
-
-module "vnet_link" {
-  source  = "terraform.registry.launch.nttdata.com/module_primitive/private_dns_vnet_link/azurerm"
-  version = "~> 1.0"
-
-  count = var.public_network_access_enabled ? 0 : 1
-
-  link_name             = "redis-private-endpoint-vnet-link"
-  resource_group_name   = var.resource_group_name != null ? var.resource_group_name : module.resource_group[0].name
-  private_dns_zone_name = module.private_dns_zone[0].zone_name
-  virtual_network_id    = join("/", slice(split("/", var.private_endpoint_subnet_id), 0, 9))
-  registration_enabled  = false
-
-  tags = var.tags
-
-  depends_on = [module.private_dns_zone, module.resource_group]
-}
-
-module "additional_vnet_links" {
-  source  = "terraform.registry.launch.nttdata.com/module_primitive/private_dns_vnet_link/azurerm"
-  version = "~> 1.0"
-
-  for_each = var.public_network_access_enabled ? {} : var.additional_vnet_links
-
-  link_name             = each.key
-  resource_group_name   = var.resource_group_name != null ? var.resource_group_name : module.resource_group[0].name
-  private_dns_zone_name = module.private_dns_zone[0].zone_name
-  virtual_network_id    = each.value
-  registration_enabled  = false
-
-  tags = var.tags
-
-  depends_on = [module.private_dns_zone, module.resource_group]
-}
-
 module "private_endpoint" {
   source  = "terraform.registry.launch.nttdata.com/module_primitive/private_endpoint/azurerm"
   version = "~> 1.0"
 
-  count = var.public_network_access_enabled ? 0 : 1
+  count = var.create_private_endpoint ? 1 : 0
 
-  region                          = var.location
   endpoint_name                   = module.resource_names["private_endpoint"].standard
-  is_manual_connection            = false
   resource_group_name             = var.resource_group_name != null ? var.resource_group_name : module.resource_group[0].name
-  private_service_connection_name = module.resource_names["private_service_connection"].standard
-  private_connection_resource_id  = module.redis_cache.redis_cache_id
-  subresource_names               = ["redisCache"]
+  region                          = var.location
   subnet_id                       = var.private_endpoint_subnet_id
-  private_dns_zone_ids            = [module.private_dns_zone[0].id]
-  private_dns_zone_group_name     = "redisCache"
+  private_dns_zone_group_name     = var.private_endpoint_dns_zone_group_name
+  private_dns_zone_ids            = var.private_endpoint_dns_zone_ids
+  is_manual_connection            = var.private_endpoint_is_manual_connection
+  private_connection_resource_id  = module.redis_cache.redis_cache_id
+  subresource_names               = var.private_endpoint_subresource_names
+  request_message                 = var.private_endpoint_request_message
+  private_service_connection_name = module.resource_names["private_service_connection"].standard
 
   tags = merge(var.tags, { resource_name = module.resource_names["private_endpoint"].standard })
 
-  depends_on = [module.resource_group, module.redis_cache, module.private_dns_zone]
+  depends_on = [module.redis_cache]
 }

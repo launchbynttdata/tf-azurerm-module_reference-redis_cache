@@ -12,7 +12,7 @@
 
 module "network_resource_names" {
   source  = "terraform.registry.launch.nttdata.com/module_library/resource_name/launch"
-  version = "~> 1.0"
+  version = "~> 2.0"
 
   for_each = {
     resource_group = {
@@ -78,7 +78,6 @@ module "redis_cache" {
   capacity                      = var.capacity
   family                        = var.family
   sku_name                      = var.sku_name
-  enable_non_ssl_port           = var.enable_non_ssl_port
   identity_ids                  = var.identity_ids
   minimum_tls_version           = var.minimum_tls_version
   patch_schedule                = var.patch_schedule
@@ -92,9 +91,7 @@ module "redis_cache" {
   subnet_id                     = var.subnet_id
   zones                         = var.zones
 
-  private_dns_zone_suffix = var.private_dns_zone_suffix
-  additional_vnet_links   = var.additional_vnet_links
-
+  create_private_endpoint    = true
   private_endpoint_subnet_id = module.virtual_network.subnet_map["private-endpoint-subnet"].id
 
   tags = var.tags

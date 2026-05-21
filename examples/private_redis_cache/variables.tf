@@ -151,12 +151,6 @@ variable "sku_name" {
   default     = "Basic"
 }
 
-variable "enable_non_ssl_port" {
-  description = "Enable the non-SSL port (6379)"
-  type        = bool
-  default     = false
-}
-
 variable "identity_ids" {
   description = <<EOT
     Specifies a list of user managed identity ids to be assigned.
@@ -193,7 +187,6 @@ variable "redis_configuration" {
     aof_backup_enabled                      = optional(bool)
     aof_storage_connection_string_0         = optional(string)
     aof_storage_connection_string_1         = optional(string)
-    enable_authentication                   = optional(bool)
     active_directory_authentication_enabled = optional(bool)
     maxmemory_reserved                      = optional(number)
     maxmemory_delta                         = optional(number)
@@ -249,24 +242,4 @@ variable "zones" {
   description = "List of availability zones where the Redis cache should be located"
   type        = list(string)
   default     = null
-}
-
-// variables to configure private DNS zone
-
-variable "private_dns_zone_suffix" {
-  description = <<EOT
-    The DNS Zone suffix for Azure Redis cache. Default is `privatelink.redis.cache.windows.net` for Public Cloud
-    For US gov cloud it should be `privatelink.redis.cache.usgovcloudapi.net`
-  EOT
-  type        = string
-  default     = "privatelink.redis.cache.windows.net"
-}
-
-variable "additional_vnet_links" {
-  description = <<EOF
-    A map of names to VNET IDs to create links with the private redis cache DNS Zone
-    Applicable only when `public_network_access_enabled` is set to false
-  EOF
-  type        = map(string)
-  default     = {}
 }
